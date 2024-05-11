@@ -18,15 +18,15 @@ const splitHTML = fetchedHTML.split('\n');
 
 // Create Image URL List
 let imgUrlList = [];
+
 //Search for '<img src' in every line until 10 URLs are saved in imgUrlList
 for (let line of splitHTML) {
   if (line.includes('<img src') && imgUrlList.length < 10) {
     imgUrlList.push(line);
   }
 }
-// console.log(imgUrlList.length);
 
-// Loop to split imgUrlList, to receive only the image URLs in clean
+// Loop to split imgUrlList, to receive only the clean image URLs
 let cleanImgUrlList = [];
 
 for (let line of imgUrlList) {
@@ -44,7 +44,7 @@ try {
   console.error(err);
 }
 
-// Download image with exact URL
+// Function to download image with URL
 function downloadMemes(url, imageName) {
   const file = fs.createWriteStream(imageName);
   https.get(url, (response) => {
@@ -57,11 +57,14 @@ function downloadMemes(url, imageName) {
 }
 let count = 1;
 
+// Loop the function
 for (let url of cleanImgUrlList) {
   let imageName = '';
   if (count < 10) {
+    // For the first 9 downloads create file name 01.jpg, 02.jpg, 03.jpg, etc.
     imageName = `./memes/0${count}.jpg`;
   } else {
+    // After the first 9 downloads create file name 10.jpg
     imageName = `./memes/${count}.jpg`;
   }
   downloadMemes(url, imageName);
