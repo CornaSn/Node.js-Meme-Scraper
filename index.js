@@ -21,7 +21,11 @@ const imgUrlList = [];
 
 // Search for '<img src' in every line until 10 URLs are saved in imgUrlList
 for (const line of splitHTML) {
-  if (line.includes('<img src') && imgUrlList.length < 10) {
+  if (
+    line.includes('src') &&
+    line.includes('https') &&
+    imgUrlList.length < 10
+  ) {
     imgUrlList.push(line);
   }
 }
@@ -34,6 +38,8 @@ for (const line of imgUrlList) {
   const cleanUrl = urlSplit[1];
   cleanImgUrlList.push(cleanUrl);
 }
+
+console.log(cleanImgUrlList);
 // Create a folder if it doesn't exist already
 const folderName = './memes';
 try {
