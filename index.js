@@ -17,24 +17,24 @@ const fetchedHTML = await fetch(
 const splitHTML = fetchedHTML.split('\n');
 
 // Create Image URL List
-let imgUrlList = [];
+const imgUrlList = [];
 
-//Search for '<img src' in every line until 10 URLs are saved in imgUrlList
-for (let line of splitHTML) {
+// Search for '<img src' in every line until 10 URLs are saved in imgUrlList
+for (const line of splitHTML) {
   if (line.includes('<img src') && imgUrlList.length < 10) {
     imgUrlList.push(line);
   }
 }
 
 // Loop to split imgUrlList, to receive only the clean image URLs
-let cleanImgUrlList = [];
+const cleanImgUrlList = [];
 
-for (let line of imgUrlList) {
+for (const line of imgUrlList) {
   const urlSplit = line.split('"');
-  let cleanUrl = urlSplit[1];
+  const cleanUrl = urlSplit[1];
   cleanImgUrlList.push(cleanUrl);
 }
-//Create a folder if it doesn't exist already
+// Create a folder if it doesn't exist already
 const folderName = './memes';
 try {
   if (!fs.existsSync(folderName)) {
@@ -46,19 +46,27 @@ try {
 
 // Function to download image with URL
 function downloadMemes(url, imageName) {
-  const file = fs.createWriteStream(imageName);
-  https.get(url, (response) => {
-    response.pipe(file);
-    file.on('finish', () => {
-      file.close();
-      console.log(`Image downloaded as ${imageName}`);
+  if (typeof imageName === 'string') {
+    const file = fs.createWriteStream(imageName);
+    https.get(url, (response) => {
+      response.pipe(file);
+
+      file.on('error', (err) => {
+        console.log('Error written to the stream.');
+        console.log(err);
+      });
+
+      file.on('finish', () => {
+        file.close();
+        console.log(`Image downloaded as ${imageName}`);
+      });
     });
-  });
+  }
 }
 let count = 1;
 
 // Loop the function
-for (let url of cleanImgUrlList) {
+for (const url of cleanImgUrlList) {
   let imageName = '';
   if (count < 10) {
     // For the first 9 downloads create file name 01.jpg, 02.jpg, 03.jpg, etc.
