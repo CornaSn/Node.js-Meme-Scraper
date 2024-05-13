@@ -39,7 +39,6 @@ for (const line of imgUrlList) {
   cleanImgUrlList.push(cleanUrl);
 }
 
-console.log(cleanImgUrlList);
 // Create a folder if it doesn't exist already
 const folderName = './memes';
 try {
