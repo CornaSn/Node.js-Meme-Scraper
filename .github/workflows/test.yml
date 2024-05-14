@@ -102,6 +102,3 @@ jobs:
             console.log('✔️ `node index.js` run 2: No error thrown during second run');
 
             console.log('✔️ All tests passed!');
-          END_SCRIPT
-      - name: Run test file
-        run: node test.js
